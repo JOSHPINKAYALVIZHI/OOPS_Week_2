@@ -50,11 +50,11 @@ class Product {
 
     
     void display() {
-        System.out.println("Product: " + name + " | Price: ₹" + price);
+        System.out.println("Product: " + name + " | Price: $" + price);
     }
 
     // Show total bill
     static void showTotalBill() {
-        System.out.println("\nTotal Bill: ₹" + totalBill);
+        System.out.println("\nTotal Bill: $" + totalBill);
     }
 }
