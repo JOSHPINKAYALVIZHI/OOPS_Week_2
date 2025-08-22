@@ -1,60 +1,74 @@
 import java.util.Scanner;
 
-public class Main {
-    public static void main(String[] args) {
-        
-        try (Scanner sc = new Scanner(System.in)) {  
-            System.out.print("Enter number of products: ");
-            int n = sc.nextInt();
-
-            
-            Product[] products = new Product[n];
-
-            for (int i = 0; i < n; i++) {
-                sc.nextLine(); 
-                System.out.print("Enter product name: ");
-                String name = sc.nextLine();
-
-                System.out.print("Enter product price: ");
-                double price = sc.nextDouble();
-
-                products[i] = new Product(name, price);
-            }
-
-            System.out.println("\n--- Bill Details ---");
-            for (Product p : products) {
-                p.display();
-            }
-
-            Product.showTotalBill();
-        }
-    }
-}
-
 class Product {
     String name;
     double price;
-    static double totalBill = 0; 
 
-    // Default constructor
-    Product() {
-        this("Unknown Item", 0); 
-    }
-
-   
     Product(String name, double price) {
-        this.name = name;   
+        this.name = name;
         this.price = price;
-        totalBill += price; 
     }
 
-    
     void display() {
-        System.out.println("Product: " + name + " | Price: $" + price);
+        System.out.println("Product: " + name + " | Price: ₹" + price);
+    }
+}
+
+
+class GroceryProduct extends Product {
+    String category;
+
+    GroceryProduct(String name, double price, String category) {
+        super(name, price);  
+        this.category = category;
     }
 
-    // Show total bill
-    static void showTotalBill() {
-        System.out.println("\nTotal Bill: $" + totalBill);
+    @Override
+    void display() {
+        System.out.println("Product: " + name + " | Category: " + category + " | Price: ₹" + price);
+    }
+}
+
+class DiscountedProduct extends GroceryProduct {
+    double discount;
+
+    DiscountedProduct(String name, double price, String category, double discount) {
+        super(name, price, category);  
+        this.discount = discount;
+    }
+
+    @Override
+    void display() {
+        double finalPrice = price - (price * discount / 100);
+        System.out.println("Product: " + name + " | Category: " + category +
+                           " | Price: ₹" + price + " | Discount: " + discount + "%" +
+                           " | Final Price: ₹" + finalPrice);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter product name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter product price: ");
+        double price = sc.nextDouble();
+
+        sc.nextLine(); // consume newline
+        System.out.print("Enter product category: ");
+        String category = sc.nextLine();
+
+        System.out.print("Enter discount (%): ");
+        double discount = sc.nextDouble();
+
+        // Multilevel inheritance object
+        DiscountedProduct dp = new DiscountedProduct(name, price, category, discount);
+
+        System.out.println("\n--- Bill Details ---");
+        dp.display();
+
+        sc.close();
     }
 }
